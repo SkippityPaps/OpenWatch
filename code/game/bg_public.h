@@ -540,6 +540,16 @@ typedef struct animation_s {
 // changes so a restart of the same anim can be detected
 #define	ANIM_TOGGLEBIT		128
 
+// "Heroes"/Classes. I'll borrow Overwatch's terminology I suppose.
+typedef enum 
+{
+  HERO_SOLDIER,
+  HERO_WIDOW,
+  HERO_RAT,
+  HERO_ZARYA,
+
+  HERO_NUM_HEROES
+} hero_t;
 
 typedef enum {
 	TEAM_FREE,

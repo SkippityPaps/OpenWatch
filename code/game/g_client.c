@@ -779,7 +779,19 @@ void ClientUserinfoChanged( int clientNum ) {
 	} else {
 		Q_strncpyz( model, Info_ValueForKey (userinfo, "model"), sizeof( model ) );
 		Q_strncpyz( headModel, Info_ValueForKey (userinfo, "headmodel"), sizeof( headModel ) );
-	}
+
+    if(!Q_stricmp(model, "slash/red")){
+      client->pers.newPlayerClass = HERO_RAT;
+    } else if( !Q_stricmp(model, "visor/default")){
+      client->pers.newPlayerClass = HERO_WIDOW;
+    } else if( !Q_stricmp(model, "sarge/red")){
+      client->pers.newPlayerClass = HERO_SOLDIER;
+    } else {
+      client->pers.newPlayerClass = HERO_ZARYA;
+      Q_strncpyz(model, "tankjr/default", sizeof(model));
+      Q_strncpyz (headModel, "tankjr/default", sizeof(headModel));
+    }
+  }
 
 /*	NOTE: all client side now
 
@@ -1158,22 +1170,47 @@ void ClientSpawn(gentity_t *ent) {
 	ent->waterlevel = 0;
 	ent->watertype = 0;
 	ent->flags = 0;
+  
+  client->pers.playerClass = client->pers.newPlayerClass; 
 	
 	VectorCopy (playerMins, ent->r.mins);
 	VectorCopy (playerMaxs, ent->r.maxs);
 
 	client->ps.clientNum = index;
 
-	client->ps.stats[STAT_WEAPONS] = ( 1 << WP_MACHINEGUN );
+	/*client->ps.stats[STAT_WEAPONS] = ( 1 << WP_MACHINEGUN );
 	if ( g_gametype.integer == GT_TEAM ) {
 		client->ps.ammo[WP_MACHINEGUN] = 50;
 	} else {
 		client->ps.ammo[WP_MACHINEGUN] = 100;
 	}
-
-	client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GAUNTLET );
-	client->ps.ammo[WP_GAUNTLET] = -1;
-	client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
+*/
+  // lets assign weapons based on chosen hero.
+  switch(client->pers.playerClass){
+      case HERO_RAT:
+        client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRENADE_LAUNCHER );
+        client->ps.ammo[WP_GRENADE_LAUNCHER] = 999;
+        break;
+      case HERO_WIDOW:
+        client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_RAILGUN ); 
+        client->ps.ammo[WP_RAILGUN] = 777; 
+        break;
+      case HERO_SOLDIER:
+        client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_ROCKET_LAUNCHER ); 
+        client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_MACHINEGUN );
+        client->ps.ammo[WP_ROCKET_LAUNCHER] = 99;
+        client->ps.ammo[WP_MACHINEGUN] = 999;
+        break;
+      case HERO_ZARYA:
+        client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_LIGHTNING ); 
+        client->ps.ammo[WP_LIGHTNING] = 999; 
+        break;
+      default:
+        client->ps.stats[STAT_WEAPONS] = ( 1 << WP_GAUNTLET );
+	      client->ps.ammo[WP_GAUNTLET] = -1;
+        break;
+    }
+		client->ps.ammo[WP_GRAPPLING_HOOK] = -1;
 
 	// health will count down towards max_health
 	ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] + 25;
@@ -1241,7 +1278,6 @@ void ClientSpawn(gentity_t *ent) {
 	// clear entity state values
 	BG_PlayerStateToEntityState( &client->ps, &ent->s, qtrue );
 }
-
 
 /*
 ===========
@@ -1332,5 +1368,3 @@ void ClientDisconnect( int clientNum ) {
 		BotAIShutdownClient( clientNum, qfalse );
 	}
 }
-
-

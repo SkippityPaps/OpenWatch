@@ -246,6 +246,8 @@ typedef struct {
 	int			voteCount;			// to prevent people from constantly calling votes
 	int			teamVoteCount;		// to prevent people from constantly calling votes
 	qboolean	teamInfo;			// send team overlay updates?
+  hero_t  playerClass;    // player's current class
+  hero_t  newPlayerClass; // player's class after respawn
 } clientPersistant_t;
 
 

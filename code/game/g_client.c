@@ -780,17 +780,27 @@ void ClientUserinfoChanged( int clientNum ) {
 		Q_strncpyz( model, Info_ValueForKey (userinfo, "model"), sizeof( model ) );
 		Q_strncpyz( headModel, Info_ValueForKey (userinfo, "headmodel"), sizeof( headModel ) );
 
-    if(!Q_stricmp(model, "slash/red")){
-      client->pers.newPlayerClass = HERO_RAT;
-    } else if( !Q_stricmp(model, "visor/default")){
-      client->pers.newPlayerClass = HERO_WIDOW;
-    } else if( !Q_stricmp(model, "sarge/red")){
-      client->pers.newPlayerClass = HERO_SOLDIER;
-    } else {
-      client->pers.newPlayerClass = HERO_ZARYA;
-      Q_strncpyz(model, "tankjr/default", sizeof(model));
-      Q_strncpyz (headModel, "tankjr/default", sizeof(headModel));
-    }
+	// set player's class based on model choice. 
+	// this is horrible. should be setting model based on chosen class.
+	// quick and dirty for now. TODO: set below to have the same behavior as above ^ 
+	// what is Info_ValueForKey?
+	if(!Q_stricmp(model, "klesk/default")){
+		client->pers.newPlayerClass = HERO_JUNKRAT;
+	} else if( !Q_stricmp(model, "mynx/default")){
+		client->pers.newPlayerClass = HERO_WIDOW;
+	} else if( !Q_stricmp(model, "sarge/default")){
+		client->pers.newPlayerClass = HERO_SOLDIER;
+	} else if( !Q_stricmp(model, "biker/stroggo") ){
+		client->pers.newPlayerClass = HERO_ROADHOG;
+	} else if( !Q_stricmp(model, "lucy/default") ){
+	    	client->pers.newPlayerClass = HERO_ZARYA;
+	} else if( !Q_stricmp(model, "hunter/default") ){
+		client->pers.newPlayerClass = HERO_PHARAH;
+	} else if( !Q_stricmp(model, "orb/default") ){
+		client->pers.newPlayerClass = HERO_TORBJORN;
+	} else if( !Q_stricmp(model, "bones/bones") ){
+		client->pers.newPlayerClass = HERO_REAPER;
+	}
   }
 
 /*	NOTE: all client side now

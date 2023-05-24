@@ -1197,7 +1197,7 @@ void ClientSpawn(gentity_t *ent) {
 */
   // lets assign weapons based on chosen hero.
   switch(client->pers.playerClass){
-      case HERO_RAT:
+      case HERO_JUNKRAT:
         client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_GRENADE_LAUNCHER );
         client->ps.ammo[WP_GRENADE_LAUNCHER] = 999;
         break;

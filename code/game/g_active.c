@@ -570,6 +570,7 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			G_Damage (ent, NULL, NULL, NULL, NULL, damage, 0, MOD_FALLING);
 			break;
 
+		case EV_ALT_FIRE_WEAPON:
 		case EV_FIRE_WEAPON:
 			FireWeapon( ent );
 			break;
